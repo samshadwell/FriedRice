@@ -6,11 +6,14 @@ Also requires a python file entitled 'credentials.py' exists in the same directo
     'page_access_token', the page token that gives this app permission to post to the given page
 """
 
-import credentials
 from datetime import date, timedelta
+
 import facebook
 
-__author__ = 'gihub.com/samshadwell'
+import credentials
+
+__author__ = 'github.com/samshadwell'
+
 
 def get_page_posts(pages, back_n_days=-1):
     """
@@ -47,11 +50,12 @@ def get_page_posts(pages, back_n_days=-1):
                 message = post['message']
                 all_posts[page].append(message)
         # Failed attempt indicates we have run out of pages, print message and go to next one
-        except KeyError as e:
+        except KeyError:
             print("Error getting post from " + page + ". Continuing")
             continue
 
     return all_posts
+
 
 def get_longest_post(all_posts):
     """
@@ -72,6 +76,7 @@ def get_longest_post(all_posts):
                 longest_len = num_words
 
     return longest
+
 
 def post_to_page(string):
     """
