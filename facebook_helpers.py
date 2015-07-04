@@ -1,14 +1,16 @@
+"""
+Library to help perform the facebook actions
+
+Requires the python facebook-sdk is installed (https://github.com/pythonforfacebook/facebook-sdk)
+Also requires a python file entitled 'credentials.py' exists in the same directory with two variables declared in it:
+    'page_access_token', the page token that gives this app permission to post to the given page
+"""
+
 import credentials
 from datetime import date, timedelta
 import facebook
 
 __author__ = 'gihub.com/samshadwell'
-
-def create_post_url(graph_url, app_id, app_secret):
-    post_args = "/posts/?key=value&access_token=" + app_id + "|" + app_secret
-    post_url = graph_url + post_args
-
-    return post_url
 
 def get_page_posts(pages, back_n_days=-1):
     """
@@ -21,7 +23,7 @@ def get_page_posts(pages, back_n_days=-1):
     """
 
     # App token used to authenticate with Facebook
-    token = credentials.AppID + '|' + credentials.AppSecret
+    token = credentials.page_access_token
     graph = facebook.GraphAPI(access_token=token, version='2.2')
 
     # Set filter to be since the appropriate number of days if necessary
@@ -43,7 +45,7 @@ def get_page_posts(pages, back_n_days=-1):
             # For each post add its message to the array
             for post in page_posts['data']:
                 message = post['message']
-                all_posts[page].append(post['message'])
+                all_posts[page].append(message)
         # Failed attempt indicates we have run out of pages, print message and go to next one
         except KeyError as e:
             print("Error getting post from " + page + ". Continuing")
@@ -71,11 +73,18 @@ def get_longest_post(all_posts):
 
     return longest
 
-# The pages that I'm going to crawl for their posts. Given is the part of the URL after www.facebook.com
-pages = ["diningAtSammys", "ricecampanile", "TheRiceThresher", "ricefarmersmarket", "SustainabilityAtRice",
-         "riceuniversitydining", "FEPatRice", "riceprogramcouncil", "RAFStudentInitiative", "R2TheRiceReview",
-         "TheRiceStandard", "willyspub", "RiceFutureAlumni", "RiceUniversity", "RiceFYP", "LowreyArboretum"]
+def post_to_page(string):
+    """
+    Posts the given string to the facebook page for which permission is granted in credentials
+    :param string:
+    :return:
+    """
 
-p = get_page_posts(pages, 7)
-print(p.keys())
-print(get_longest_post(p))
+    # Set up Facebook Graph API connection
+    token = credentials.page_access_token
+    graph = facebook.GraphAPI(access_token=token, version='2.2')
+
+    # Post string to page's feed as the page
+    graph.put_object(parent_object='me', connection_name='feed', message=string)
+
+    return
