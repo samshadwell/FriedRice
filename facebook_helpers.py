@@ -19,10 +19,6 @@ def get_page_posts(pages, back_n_days=-1):
         this is specified as 7, will get all posts from the last 7 days.
     :return: dictionary which maps each page string in 'pages' to a list of its post strings
     """
-    # The pages that I'm going to crawl for their posts. Given is the part of the URL after www.facebook.com
-    pages = ["diningAtSammys", "ricecampanile", "TheRiceThresher", "ricefarmersmarket", "SustainabilityAtRice",
-             "riceuniversitydining", "FEPatRice", "riceprogramcouncil", "RAFStudentInitiative", "R2TheRiceReview",
-             "TheRiceStandard", "willyspub", "RiceFutureAlumni", "RiceUniversity", "RiceFYP", "LowreyArboretum"]
 
     # App token used to authenticate with Facebook
     token = credentials.AppID + '|' + credentials.AppSecret
@@ -75,8 +71,11 @@ def get_longest_post(all_posts):
 
     return longest
 
+# The pages that I'm going to crawl for their posts. Given is the part of the URL after www.facebook.com
+pages = ["diningAtSammys", "ricecampanile", "TheRiceThresher", "ricefarmersmarket", "SustainabilityAtRice",
+         "riceuniversitydining", "FEPatRice", "riceprogramcouncil", "RAFStudentInitiative", "R2TheRiceReview",
+         "TheRiceStandard", "willyspub", "RiceFutureAlumni", "RiceUniversity", "RiceFYP", "LowreyArboretum"]
 
-p = get_page_posts(7)
+p = get_page_posts(pages, 7)
 print(p.keys())
 print(get_longest_post(p))
-
