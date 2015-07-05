@@ -14,10 +14,14 @@ pages = ["diningAtSammys", "ricecampanile", "TheRiceThresher", "ricefarmersmarke
 
 # The number of days worth of facebook posts to go back and get (e.g. 7 means get posts from the last week)
 # Set to -1 to do for all posts.
-back_n_days = 7
+back_n_days = -1
 
 # The probability of swapping any individual word in the original post for another word
 p_swap = 0.5
 
 # Type of generator to use. Currently supported are "markov" and "replace"
 generator = "markov"
+
+# For a markov generator the mode. If 'pos' makes a chain using tagged parts of speech. 'words' uses the words
+# themselves
+markov_type = 'words'

@@ -19,7 +19,7 @@ def main():
     # """
 
     if config.generator == "markov":
-        post = generators.markov.generate()
+        post = generators.markov.generate(config.markov_type)
     elif config.generator == "replace":
         post = generators.replace.generate()
     else:

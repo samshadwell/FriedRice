@@ -2,6 +2,7 @@
 Generates text from the configured pages and post history using a first-order Markov model
 """
 import random
+from textblob import TextBlob
 
 import config
 import facebook_helpers as fb
@@ -70,7 +71,7 @@ def next_pos(current, markov_model):
             for choice in choices.keys():
                 possible_to.add(choice)
 
-        return random.choice(possible_to)
+        return random.choice(list(possible_to))
 
 
 def generate_sentence_structure(markov):
@@ -90,7 +91,7 @@ def generate_sentence_structure(markov):
     return constructed
 
 
-def generate():
+def generate(mode):
     """
     Generate text using a first-order markov chain. Requires pages and back_n_days are correct in the config.py
     :return: The text generated
@@ -113,7 +114,14 @@ def generate():
     # Construct a Markov chain with the posts
     markov = {}
     for post in posts_text:
-        post_structure = pos.convert_string_to_structure(post)
+        if mode == 'pos':
+            post_structure = pos.convert_string_to_structure(post)
+        elif mode == 'words':
+            post_structure = TextBlob(post).tokens
+            post_structure.insert(0, 'START')
+            post_structure.append('END')
+        else:
+            post_structure = ['START', 'END']
         markov = construct_first_order_markov(markov, post_structure)
 
     # Generate post's structure
